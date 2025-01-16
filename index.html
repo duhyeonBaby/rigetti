@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리게티 타임머신</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+        }
+        header {
+            margin-top: 20px;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        #tradingview-widget {
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Title -->
+    <header>[15분 전 리게티 가격]</header>
+
+
+    <!-- TradingView Widget -->
+    <div id="tradingview-widget"></div>
+
+    <script>
+        (function() {
+            const script = document.createElement("script");
+            script.src = "https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js";
+            script.async = true;
+            script.innerHTML = JSON.stringify({
+                "symbol": "NASDAQ:RGTI", // Replace with your stock ticker
+                "width": "100%",
+                "colorTheme": "dark",
+                "isTransparent": false,
+                "locale": "en"
+            });
+            document.getElementById("tradingview-widget").appendChild(script);
+        })();
+    </script>
+</body>
+</html>
