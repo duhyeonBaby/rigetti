@@ -1,57 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>리게티 타임머신</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
-        }
-        header {
-            margin-top: 20px;
-            font-size: 2rem;
-            font-weight: bold;
-        }
-        #tradingview-widget {
-            width: 100%;
-            max-width: 600px;
-            height: 400px;
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>리게티 타임머신</title>
+  <style>
+    :root {
+      --bg-color: #121212;
+      --text-color: #ffffff;
+      --header-color: #1e1e1e;
+      --button-bg: #333;
+      --button-text: #fff;
+    }
+
+    .light-mode {
+      --bg-color: #f0f0f0;
+      --text-color: #000000;
+      --header-color: #ffffff;
+      --button-bg: #ddd;
+      --button-text: #000;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    header {
+      margin-top: 40px;
+      font-size: 2.2rem;
+      font-weight: bold;
+      background-color: var(--header-color);
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    #tradingview-widget {
+      width: 100%;
+      max-width: 600px;
+      height: 400px;
+      margin-top: 30px;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 10px 16px;
+      background-color: var(--button-bg);
+      color: var(--button-text);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      background-color: var(--button-text);
+      color: var(--button-bg);
+    }
+
+    .future-price-section {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .future-price-button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: var(--button-bg);
+      color: var(--button-text);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .future-price-button:hover {
+      background-color: var(--button-text);
+      color: var(--button-bg);
+    }
+
+    .price-output {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-    <!-- Main Title -->
-    <header>[15분 전 리게티 가격]</header>
+  <!-- Theme Toggle Button -->
+  <button class="theme-toggle" onclick="toggleTheme()">🌙 다크 / 라이트 모드</button>
 
+  <!-- Main Title -->
+  <header>[15분 전 리게티 가격]</header>
 
-    <!-- TradingView Widget -->
-    <div id="tradingview-widget"></div>
-    <p>(+XCUR 2월 전에 한번 쏩시다)</p>
+  <!-- TradingView Widget -->
+  <div id="tradingview-widget"></div>
 
-    <script>
-        (function() {
-            const script = document.createElement("script");
-            script.src = "https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js";
-            script.async = true;
-            script.innerHTML = JSON.stringify({
-                "symbol": "NASDAQ:RGTI", // Replace with your stock ticker
-                "width": "100%",
-                "colorTheme": "dark",
-                "isTransparent": false,
-                "locale": "en"
-            });
-            document.getElementById("tradingview-widget").appendChild(script);
-        })();
-    </script>
+  <!-- Future Price Feature -->
+  <div class="future-price-section">
+    <button class="future-price-button" onclick="predictFuturePrice()">✅클릭✅</button>
+    <div class="price-output" id="future-price-output">미래가 궁금하신가요?</div>
+  </div>
+
+  <script>
+    // TradingView 위젯 삽입
+    (function() {
+      const script = document.createElement("script");
+      script.src = "https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js";
+      script.async = true;
+      script.innerHTML = JSON.stringify({
+        "symbol": "NASDAQ:RGTI",
+        "width": "100%",
+        "colorTheme": "dark",
+        "isTransparent": false,
+        "locale": "en"
+      });
+      document.getElementById("tradingview-widget").appendChild(script);
+    })();
+
+    // 다크/라이트 모드 토글 기능
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+    }
+
+    // 미래 가격 예측 기능
+    function predictFuturePrice() {
+      const output = document.getElementById('future-price-output');
+      const chance = Math.random();
+
+      let price;
+      if (chance < 0.01) {
+        // 0.1% 확률로 엄청 큰 숫자
+        price = (Math.random() * 1000000 + 1000000).toFixed(2);
+        output.innerText = `🚀 미래 가격: $${price} (게티업!!)`;
+      } else {
+        // 99.9% 확률로 일반적인 범위
+        price = (Math.random() * 10 + 10).toFixed(2);
+        output.innerText = `🔮 리게티 미래 가격: $${price}`;
+      }
+    }
+  </script>
 </body>
 </html>
